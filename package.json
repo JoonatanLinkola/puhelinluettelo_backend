@@ -1,0 +1,19 @@
+{
+  "name": "puhelinluettelo_backend",
+  "version": "1.0.0",
+  "description": "fullstack osa3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoonatanLinkola/puhelinluettelo_backend.git"
+  },
+  "author": "Joonatan Linkola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoonatanLinkola/puhelinluettelo_backend/issues"
+  },
+  "homepage": "https://github.com/JoonatanLinkola/puhelinluettelo_backend#readme"
+}
