@@ -1,7 +1,6 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
-
-app.use(express.json())
 
 let persons = [
   {
@@ -26,6 +25,24 @@ let persons = [
   }
 ]
 
+const morganLogger = morgan(function (tokens, req, res) {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    (
+      (tokens.method(req, res) === 'POST')
+        ? JSON.stringify(req.body)
+        : null
+    )
+  ].join(' ')
+})
+
+app.use(express.json())
+app.use(morganLogger)
+
 const generateID = () => {
   return Math.floor(Math.random() * 1000)
 }
@@ -36,7 +53,6 @@ app.get('/api/persons', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  console.log("joo")
 
   if (!body.name) {
     console.log("name missing")
