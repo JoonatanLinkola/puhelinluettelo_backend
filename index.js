@@ -112,6 +112,7 @@ app.delete('/api/persons/:id', (request, response) => {
 
   response.status(204).end()
 })
+app.use(express.static('build'))
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
