@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-/build
+# # production     removed build for 3.11.
+# /build
 
 # misc
 .DS_Store
