@@ -6,6 +6,8 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
+const newName = process.arvg[3]
+const newNumber = process.arvg[4]
 
 const url =
   `mongodb+srv://joo:${password}@round3.qw53lvw.mongodb.net/phonebookApp?retryWrites=true&w=majority`
@@ -30,10 +32,10 @@ if (process.argv.length === 3) {
   })
 
 } else if (process.argv.length === 5) {
-  
+
   const person = new Person({
-    name: `${process.arvg[3]}`,
-    number: `${process.arvg[4]}`
+    name: newName,
+    number: newNumber
   })
 
   person.save().then(result => {
