@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Person = require('./models/person') 
 
 let persons = [
   {
@@ -45,12 +47,36 @@ app.use(express.json())
 app.use(morganLogger)
 app.use(cors())
 
+const mongoose = require('mongoose')
+
+// const url =
+//   `mongodb+srv://joo:joo100JOO100@round3.qw53lvw.mongodb.net/phonebookApp?retryWrites=true&w=majority`
+
+// mongoose.connect(url)
+
+// const personSchema = new mongoose.Schema({
+//   name: String,
+//   number: String,
+// })
+
+// personSchema.set('toJSON', {
+//   transform: (document, returnedObject) => {
+//     returnedObject.id = returnedObject._id.toString()
+//     delete returnedObject._id
+//     delete returnedObject.__v
+//   }
+// })
+
+// const Person = mongoose.model('Person', personSchema)
+
 const generateID = () => {
   return Math.floor(Math.random() * 1000)
 }
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -75,15 +101,15 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const newPerson = {
+  const newPerson = new Person({
     id: generateID(),
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(newPerson)
-
-  response.json(newPerson)
+  newPerson.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -97,7 +123,7 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  const person = persons.find(note => note.id === id)
+  const person = persons.find(each => each.id === id)
   
   if (person) {
     response.json(person)
@@ -108,13 +134,13 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
-  persons = persons.filter(note => note.id !== id)
+  persons = persons.filter(each => each.id !== id)
 
   response.status(204).end()
 })
 app.use(express.static('build'))
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
