@@ -6,8 +6,6 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
-const newName = process.arvg[3]
-const newNumber = process.arvg[4]
 
 const url =
   `mongodb+srv://joo:${password}@round3.qw53lvw.mongodb.net/phonebookApp?retryWrites=true&w=majority`
@@ -32,10 +30,10 @@ if (process.argv.length === 3) {
   })
 
 } else if (process.argv.length === 5) {
-
+  
   const person = new Person({
-    name: newName,
-    number: newNumber
+    name: `${process.argv[3]}`,
+    number: `${process.argv[4]}`
   })
 
   person.save().then(result => {
@@ -43,15 +41,3 @@ if (process.argv.length === 3) {
     mongoose.connection.close()
   })
 }
-
-// const person = new Person({
-//   content: 'HTML is Easy',
-//   date: new Date(),
-//   important: true,
-// })
-
-// note.save().then(result => {
-//   console.log('note saved!')
-//   mongoose.connection.close()
-// })
-
