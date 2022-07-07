@@ -5,29 +5,6 @@ const app = express()
 const cors = require('cors')
 const Person = require('./models/person') 
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456"
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523"
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345"
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122"
-  }
-]
-
 const morganLogger = morgan(function (tokens, req, res) {
   return [
     tokens.method(req, res),
@@ -57,7 +34,7 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', async (request, response) => {
   const body = request.body
 
   if (!body.name) {
@@ -72,31 +49,34 @@ app.post('/api/persons', (request, response) => {
       error: 'number missing'
     })
   }
-  if (persons.map(each => each.name).includes(body.name)) {
-    console.log("duplicate name")
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }
+      if (await Person.exists({name:body.name})){
+        return response.status(400).json({
+          error:'name must be unique'
+        })
+      }
+      const newPerson = new Person({
+        id: generateID(),
+        name: body.name,
+        number: body.number,
+      })
+      newPerson.save().then(savedPerson => {
+        response.json(savedPerson)
+      })
+   
 
-  const newPerson = new Person({
-    id: generateID(),
-    name: body.name,
-    number: body.number,
-  })
-
-  newPerson.save().then(savedPerson => {
-    response.json(savedPerson)
-  })
 })
 
 app.get('/info', (request, response) => {
-  response.send(`<div>
-                  Phonebook has info for ${persons.length} people
-                  <p>
-                    ${Date()}
-                  <p/>
-                </div>`)
+  Person.countDocuments({}).then(immu => {
+    response.send(
+      `<div>
+        Phonebook has info for ${immu} people
+        <p>
+          ${Date()}
+        <p/>
+      </div>`)
+  })
+  
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
