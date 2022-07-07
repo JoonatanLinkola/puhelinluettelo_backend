@@ -1,9 +1,9 @@
-DELETE http://localhost:3001/api/persons/62c59ba8d6fe8da414b7f7c8
+# DELETE http://localhost:3001/api/persons/62c692728e9bb851d6e4a825
 
-# POST http://localhost:3001/api/persons
-# Content-Type: application/json
+POST http://localhost:3001/api/persons
+Content-Type: application/json
 
-# {
-#    "name": "immuJooJoo",
-#    "number": "69"
-# }
+{
+   "name": "immuJooJoo",
+   "number": "6969696969"
+}
