@@ -47,28 +47,6 @@ app.use(express.json())
 app.use(morganLogger)
 app.use(cors())
 
-const mongoose = require('mongoose')
-
-// const url =
-//   `mongodb+srv://joo:joo100JOO100@round3.qw53lvw.mongodb.net/phonebookApp?retryWrites=true&w=majority`
-
-// mongoose.connect(url)
-
-// const personSchema = new mongoose.Schema({
-//   name: String,
-//   number: String,
-// })
-
-// personSchema.set('toJSON', {
-//   transform: (document, returnedObject) => {
-//     returnedObject.id = returnedObject._id.toString()
-//     delete returnedObject._id
-//     delete returnedObject.__v
-//   }
-// })
-
-// const Person = mongoose.model('Person', personSchema)
-
 const generateID = () => {
   return Math.floor(Math.random() * 1000)
 }
@@ -133,12 +111,15 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(each => each.id !== id)
-
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
+
 app.use(express.static('build'))
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
