@@ -100,6 +100,7 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
+  console.log(request.params.id)
   Person.findById(request.params.id)
     .then(note => {
       if (note) {
@@ -111,10 +112,27 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then(result => {
       response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+  
+  const updatedPerson = {
+    name: body.name,
+    number: body.number,
+  }
+  console.log(request.params)
+  console.log(body)
+  console.log(request.params.id)
+  Person.findByIdAndUpdate(request.params.id, updatedPerson, { new: true })
+    .then(updated => {
+      response.json(updated)
     })
     .catch(error => next(error))
 })
