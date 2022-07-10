@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
-const Person = require('./models/person') 
+const Person = require('./models/person')
 
 const morganLogger = morgan(function (tokens, req, res) {
   return [
@@ -38,18 +38,18 @@ app.post('/api/persons', async (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
-    console.log("name missing")
-    return response.status(400).json({ 
-      error: 'name missing' 
+    console.log('name missing')
+    return response.status(400).json({
+      error: 'name missing'
     })
   }
   if (!body.number) {
-    console.log("number missing")
+    console.log('number missing')
     return response.status(400).json({
       error: 'number missing'
     })
   }
-  if (await Person.exists({name:body.name})){
+  if (await Person.exists({ name:body.name })){
     return response.status(400).json({
       error:'name must be unique'
     })
@@ -76,7 +76,7 @@ app.get('/info', (request, response) => {
         <p/>
       </div>`)
   })
-  
+
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -94,7 +94,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -102,7 +102,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  
+
   const updatedPerson = {
     name: body.name,
     number: body.number,
@@ -133,6 +133,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

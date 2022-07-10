@@ -1,11 +1,12 @@
 const mongoose = require('mongoose')
 
+// eslint-disable-next-line no-undef
 const url = process.env.MONGODB_URI
 
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -24,7 +25,7 @@ const personSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(v) {
-        return /^[0-9]{2,3}[-]{1}[0-9]{4,15}$/.test(v); // "enough characters" implemented as at most 15 characters in the second part of the number
+        return /^[0-9]{2,3}[-]{1}[0-9]{4,15}$/.test(v) // "enough characters" implemented as at most 15 characters in the second part of the number
       },
       message: props => `${props.value} is not a valid phone number`
     }

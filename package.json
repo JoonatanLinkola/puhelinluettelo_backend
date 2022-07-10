@@ -10,7 +10,8 @@
     "build:ui": "(if exist build (rmdir /q/s build)) && cd ../FullstackOpen/osa2/puhelinluettelo/ && npm run build && xcopy build \"../../../puhelinluettelo_backend/build/\" /E/H/I",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.19.0",
     "nodemon": "^2.0.16"
   }
 }
